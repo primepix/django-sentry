@@ -14,6 +14,12 @@ import warnings
 from django.db import models
 from django.db.models import signals, Sum, F
 
+try:
+    from django.utils import timezone
+    now_with_tz_if_supported = timezone.now
+except ImportError:
+    now_with_tz_if_supported = datetime.datetime.now
+
 from sentry.conf import settings
 from sentry.utils import construct_checksum, get_db_engine, should_mail
 from sentry.utils.charts import has_charts
@@ -84,9 +90,8 @@ class SentryManager(models.Manager):
 
     def from_kwargs(self, **kwargs):
         from sentry.models import Message, GroupedMessage, FilterValue
-
         URL_MAX_LENGTH = Message._meta.get_field_by_name('url')[0].max_length
-        now = kwargs.pop('timestamp', None) or datetime.datetime.now()
+        now = kwargs.pop('timestamp', None) or now_with_tz_if_supported()
 
         view = kwargs.pop('view', None)
         logger_name = kwargs.pop('logger', 'root')
@@ -235,7 +240,7 @@ class GroupedMessageManager(SentryManager):
             method = conn.ops.date_trunc_sql('hour', 'date')
 
         hours = max_days*24
-        today = datetime.datetime.now().replace(microsecond=0, second=0, minute=0)
+        today = now_with_tz_if_supported().replace(microsecond=0, second=0, minute=0)
         min_date = today - datetime.timedelta(hours=hours)
 
         chart_qs = list(group.messagecountbyminute_set.all()\

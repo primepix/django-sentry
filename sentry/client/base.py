@@ -23,6 +23,12 @@ from django.http import HttpRequest
 from django.template import TemplateSyntaxError
 from django.template.loader import LoaderOrigin
 
+try:
+    from django.utils import timezone
+    now_with_tz_if_supported = timezone.now
+except ImportError:
+    now_with_tz_if_supported = datetime.datetime.now
+
 import sentry
 from sentry.conf import settings
 from sentry.utils import json
@@ -226,7 +232,7 @@ class SentryClient(object):
         kwargs['data'] = transform(kwargs['data'])
 
         if 'timestamp' not in kwargs:
-            kwargs['timestamp'] = datetime.datetime.now()
+            kwargs['timestamp'] = now_with_tz_if_supported()
 
         self.send(**kwargs)
         

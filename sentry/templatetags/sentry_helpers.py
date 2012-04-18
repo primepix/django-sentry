@@ -6,6 +6,13 @@ from django.template.defaultfilters import stringfilter
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
+
+try:
+    from django.utils import timezone
+    now_with_tz_if_supported = timezone.now
+except ImportError:
+    now_with_tz_if_supported = datetime.datetime.now
+
 from paging.helpers import paginate as paginate_func
 from sentry.plugins import GroupActionProvider
 from sentry.utils import json
@@ -115,7 +122,7 @@ def timesince(value):
     from django.template.defaultfilters import timesince
     if not value:
         return _('Never')
-    if value < datetime.datetime.now() - datetime.timedelta(days=5):
+    if value < now_with_tz_if_supported() - datetime.timedelta(days=5):
         return value.date()
     value = (' '.join(timesince(value).split(' ')[0:2])).strip(',')
     if value == _('0 minutes'):

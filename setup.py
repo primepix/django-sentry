@@ -10,7 +10,7 @@ except ImportError:
     from setuptools import setup, find_packages, Command
 
 tests_require = [
-    'Django>=1.2,<1.4',
+    'Django>=1.2',
 
     # celery
     'django-celery',
