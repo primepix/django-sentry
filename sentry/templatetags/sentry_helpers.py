@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
+import datetime
+
 try:
     from django.utils import timezone
     now_with_tz_if_supported = timezone.now
@@ -19,7 +21,6 @@ from sentry.utils import json
 from templatetag_sugar.register import tag
 from templatetag_sugar.parser import Name, Variable, Constant, Optional
 
-import datetime
 
 register = template.Library()
 
