@@ -243,7 +243,7 @@ class cached_property(object):
 _VERSION_CACHE = {}
 def get_versions(module_list=None):
     if not module_list:
-        module_list = django_settings.INSTALLED_APPS + ['django']
+        module_list = django_settings.INSTALLED_APPS + ('django',)
 
     ext_module_list = set()
     for m in module_list:
