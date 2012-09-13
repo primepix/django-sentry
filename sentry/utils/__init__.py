@@ -23,6 +23,7 @@ from django.http import HttpRequest
 from django.utils.encoding import force_unicode
 from django.utils.functional import Promise
 from django.utils.hashcompat import md5_constructor, sha_constructor
+from django.utils.encoding import smart_str
 
 import sentry
 from sentry.conf import settings
@@ -124,7 +125,7 @@ def transform(value, stack=[], context=None):
     elif isinstance(value, uuid.UUID):
         ret = repr(value)
     elif isinstance(value, dict):
-        ret = dict((str(k), transform_rec(v)) for k, v in value.iteritems())
+        ret = dict((smart_str(k), transform_rec(v)) for k, v in value.iteritems())
     elif isinstance(value, unicode):
         ret = to_unicode(value)
     elif isinstance(value, str):
