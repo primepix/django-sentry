@@ -22,10 +22,10 @@ from django.conf import settings as django_settings
 from django.http import HttpRequest
 from django.utils.encoding import force_unicode
 from django.utils.functional import Promise
-from django.utils.hashcompat import md5_constructor, sha_constructor
 from django.utils.encoding import smart_str
 
 import sentry
+import hashlib
 from sentry.conf import settings
 
 _FILTER_CACHE = None
@@ -61,7 +61,7 @@ def get_db_engine(alias='default'):
     return value.rsplit('.', 1)[-1]
 
 def construct_checksum(level=logging.ERROR, class_name='', traceback='', message='', **kwargs):
-    checksum = md5_constructor(str(level))
+    checksum = hashlib.md5(str(level))
     checksum.update(class_name or '')
 
     if 'data' in kwargs and kwargs['data'] and '__sentry__' in kwargs['data'] and 'frames' in kwargs['data']['__sentry__']:
@@ -304,7 +304,7 @@ def is_float(var):
     return True
 
 def get_signature(message, timestamp):
-    return hmac.new(settings.KEY, '%s %s' % (timestamp, message), sha_constructor).hexdigest()
+    return hmac.new(settings.KEY, '%s %s' % (timestamp, message), hashlib.sha1).hexdigest()
 
 def get_auth_header(signature, timestamp, client):
     return 'Sentry sentry_signature=%s, sentry_timestamp=%s, sentry_client=%s' % (
