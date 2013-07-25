@@ -8,7 +8,7 @@ sentry.web.urls
 
 import re
 
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.views.defaults import page_not_found
 
 from sentry.conf.settings import KEY

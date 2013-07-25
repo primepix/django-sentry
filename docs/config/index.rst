@@ -185,7 +185,7 @@ Sentry supports sending a message ID to your clients so that they can be tracked
 
 Another alternative method is rendering it within a template. By default, Sentry will attach request.sentry when it catches a Django exception. In our example, we will use this information to modify the default 500.html which is rendered, and show the user a case reference ID. The first step in doing this is creating a custom ``handler500`` in your ``urls.py`` file::
 
-	from django.conf.urls.defaults import *
+	from django.conf.urls import *
 
 	from django.views.defaults import page_not_found, server_error
 
