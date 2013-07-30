@@ -108,8 +108,8 @@ class SentryClient(object):
 
         request = kwargs.pop('request', None)
         if isinstance(request, HttpRequest):
-            if not request.POST and request.raw_post_data:
-                post_data = request.raw_post_data
+            if not request.POST and request.body:
+                post_data = request.body
             else:
                 post_data = request.POST
 

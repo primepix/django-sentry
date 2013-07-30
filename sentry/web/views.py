@@ -485,7 +485,7 @@ def store(request):
 
         format = 'json'
 
-        data = request.raw_post_data
+        data = request.body
 
         # Signed data packet
         if signature and timestamp:

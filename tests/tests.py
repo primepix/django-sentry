@@ -823,7 +823,7 @@ class SentryTest(BaseTestCase):
         self.assertEquals(last.level, logging.ERROR)
         self.assertEquals(last.message, 'This is a test error')
         self.assertTrue('POST' in last.data)
-        self.assertEquals(request.raw_post_data, last.data['POST'])
+        self.assertEquals(request.body, last.data['POST'])
 
     def test_score_update(self):
         self.assertRaises(Exception, self.client.get, reverse('sentry-raise-exc'))
